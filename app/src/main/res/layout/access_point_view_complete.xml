@@ -167,9 +167,18 @@
                         android:id="@+id/distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/list_view_item_horizontal_spacer"
                         android:textColor="@color/distance"
                         android:textStyle="bold"
                         tools:text="~999.9m" />
+
+                    <TextView
+                        android:id="@+id/capabilities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/security"
+                        android:textStyle="italic"
+                        tools:text="[WPS WEP WPA WPA2 WPA3]" />
                 </LinearLayout>
 
                 <!-- Row 2 -->
@@ -210,14 +219,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/capabilities"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/security"
-                        android:textStyle="italic"
-                        tools:text="[WPS WEP WPA WPA2 WPA3]" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
