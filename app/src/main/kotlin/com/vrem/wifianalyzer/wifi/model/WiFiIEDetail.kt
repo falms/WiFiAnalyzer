@@ -7,6 +7,8 @@ data class WiFiIEDetail(
     var wpsManufacturer: String = String.EMPTY,
     var wpsDeviceName: String = String.EMPTY,
     var wpsModelName: String = String.EMPTY,
+    var roamingConsortiumNumANQPOIs: Int = -1,
+    var roamingConsortiumOIs: List<String> = listOf(),
 ) {
     fun deviceDetail(): String {
         val details = mutableListOf<String>()
@@ -18,6 +20,12 @@ data class WiFiIEDetail(
         }
         if (wpsModelName.isNotEmpty()) {
             details.add(wpsModelName)
+        }
+        if (roamingConsortiumNumANQPOIs >= 0 || roamingConsortiumOIs.isNotEmpty()) {
+            var text = "RCOI"
+            if (roamingConsortiumNumANQPOIs >= 0) { text += "(${roamingConsortiumNumANQPOIs})" }
+            if (roamingConsortiumOIs.isNotEmpty()) { text += ": " + roamingConsortiumOIs.joinToString(separator = " ") }
+            details.add(text)
         }
         return details.distinct().joinToString(separator = " ")
     }

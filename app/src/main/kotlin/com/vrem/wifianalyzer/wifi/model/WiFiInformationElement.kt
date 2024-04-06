@@ -20,6 +20,35 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
                         wiFiIEDetail.stationCount = bytes.order(ByteOrder.LITTLE_ENDIAN).short.toInt()
                     }
 
+                    // Roaming Consortium
+                    111 -> {
+                        // Number of ANQP OIs
+                        wiFiIEDetail.roamingConsortiumNumANQPOIs = bytes.get().toInt()
+
+                        val oiLengths = bytes.get().toInt()
+                        val oi1Length = oiLengths and 0b00001111
+                        val oi2Length = (oiLengths and 0b11110000) shr 4
+
+                        val ois = mutableListOf<String>()
+                        if (oi1Length > 0) {
+                            val oi1 = ByteArray(oi1Length)
+                            bytes.get(oi1)
+                            ois.add(oi1.toHexString(HexFormat.UpperCase))
+                        }
+                        if (oi2Length > 0) {
+                            val oi2 = ByteArray(oi2Length)
+                            bytes.get(oi2)
+                            ois.add(oi2.toHexString(HexFormat.UpperCase))
+                        }
+                        if (bytes.hasRemaining()) {
+                            val oi3 = ByteArray(bytes.remaining())
+                            bytes.get(oi3)
+                            ois.add(oi3.toHexString(HexFormat.UpperCase))
+                        }
+
+                        wiFiIEDetail.roamingConsortiumOIs = ois
+                    }
+
                     // Vendor Specific
                     221 -> {
                         val oui = ByteArray(3)
