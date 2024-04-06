@@ -87,6 +87,7 @@ class AccessPointDetail {
             view.findViewById<View>(R.id.tab).visibility = if (child) View.VISIBLE else View.GONE
             setSecurityImage(view, wiFiDetail)
             setLevelText(view, wiFiSignal)
+            setStationCount(view, wiFiDetail.wiFiIEDetail.stationCount)
         }
 
     private fun setSecurityImage(view: View, wiFiDetail: WiFiDetail) =
@@ -128,6 +129,16 @@ class AccessPointDetail {
             it.tag = strength.imageResource
             it.setImageResource(strength.imageResource)
             it.setColorFilter(ContextCompat.getColor(view.context, strength.colorResource))
+        }
+
+    private fun setStationCount(view: View, stationCount: Int) =
+        view.findViewById<TextView>(R.id.stationCount)?.let {
+            if (stationCount < 0) {
+                it.visibility = View.GONE
+            } else {
+                it.visibility = View.VISIBLE
+                it.text = "(${stationCount})"
+            }
         }
 
     private fun setViewVendorShort(view: View, wiFiAdditional: WiFiAdditional) =

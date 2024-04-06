@@ -28,6 +28,7 @@ import com.vrem.wifianalyzer.wifi.model.WiFiConnection
 import com.vrem.wifianalyzer.wifi.model.WiFiData
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail
 import com.vrem.wifianalyzer.wifi.model.WiFiIdentifier
+import com.vrem.wifianalyzer.wifi.model.WiFiInformationElement
 import com.vrem.wifianalyzer.wifi.model.WiFiSecurity
 import com.vrem.wifianalyzer.wifi.model.WiFiSignal
 import com.vrem.wifianalyzer.wifi.model.WiFiStandard
@@ -73,6 +74,13 @@ internal class Transformer(private val cache: Cache) {
             listOf()
         }
 
+    internal fun informationElements(scanResult: ScanResult): List<WiFiInformationElement> =
+        if (minVersionR()) {
+            scanResult.informationElements.map { WiFiInformationElement(it.id, it.idExt, it.bytes) }
+        } else {
+            listOf()
+        }
+
     internal fun minVersionR(): Boolean = buildMinVersionR()
     internal fun minVersionT(): Boolean = buildMinVersionT()
 
@@ -94,7 +102,9 @@ internal class Transformer(private val cache: Cache) {
             String.nullToEmpty(scanResult.capabilities),
             securityTypes(scanResult)
         )
-        return WiFiDetail(wiFiIdentifier, wiFiSecurity, wiFiSignal)
-    }
 
+        val wiFiIEDetail = WiFiInformationElement.parse(informationElements(scanResult))
+
+        return WiFiDetail(wiFiIdentifier, wiFiSecurity, wiFiSignal, wiFiIEDetail)
+    }
 }

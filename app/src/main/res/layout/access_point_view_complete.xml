@@ -56,9 +56,19 @@
                 android:id="@+id/ssid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/list_view_item_horizontal_spacer"
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
                 tools:text="NETWORK SSID (0a:0a:0a:0a:0a:0a)" />
+
+            <TextView
+                android:id="@+id/stationCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/regular"
+                android:textStyle="bold"
+                tools:text="(10)" />
         </LinearLayout>
 
         <!-- Row 2 -->
