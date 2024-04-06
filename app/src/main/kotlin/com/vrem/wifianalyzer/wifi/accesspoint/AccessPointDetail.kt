@@ -109,6 +109,7 @@ class AccessPointDetail {
             view.findViewById<TextView>(R.id.capabilities).text = wiFiDetail.wiFiSecurity.securities
                 .toList()
                 .joinToString(" ", "[", "]")
+            setDeviceDetail(view, wiFiDetail.wiFiIEDetail.deviceDetail())
         }
 
     private fun setWiFiStandardImage(view: View, wiFiSignal: WiFiSignal) =
@@ -138,6 +139,16 @@ class AccessPointDetail {
             } else {
                 it.visibility = View.VISIBLE
                 it.text = "(${stationCount})"
+            }
+        }
+
+    private fun setDeviceDetail(view: View, deviceDetail: String) =
+        view.findViewById<TextView>(R.id.deviceDetail)?.let {
+            if (deviceDetail.isBlank()) {
+                it.visibility = View.GONE
+            } else {
+                it.visibility = View.VISIBLE
+                it.text = deviceDetail
             }
         }
 
