@@ -38,8 +38,7 @@ import java.util.TimeZone
 
 @OpenClass
 class AccessPointDetail {
-    private val vendorShortMax = 12
-    private val vendorLongMax = 30
+    private val vendorLongMax = 64
 
     fun makeView(
         convertView: View?,
@@ -137,7 +136,7 @@ class AccessPointDetail {
                 it.visibility = View.GONE
             } else {
                 it.visibility = View.VISIBLE
-                it.text = wiFiAdditional.vendorName.take(vendorShortMax)
+                it.text = wiFiAdditional.vendorName
             }
         }
 
