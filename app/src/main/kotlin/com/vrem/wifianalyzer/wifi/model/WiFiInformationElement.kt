@@ -8,6 +8,7 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
     @OptIn(ExperimentalStdlibApi::class)
     companion object {
         private val OUI_MICROSOFT = "0050F2".hexToByteArray()
+        private val OUI_ARUBA     = "000B86".hexToByteArray()
         private val OUI_MERAKI    = "00180A".hexToByteArray()
 
         fun parse(elements: List<WiFiInformationElement>): WiFiIEDetail {
@@ -76,6 +77,28 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
                                         }
                                     }
                                 }
+                            }
+                        } else if (oui.contentEquals(OUI_ARUBA)) {
+                            val vsOuiVersion = bytes.get().toInt()
+                            val vsOuiType = bytes.get().toInt()
+                            val vsOuiSubType = bytes.get().toInt()
+
+                            // Instant On AP ?
+                            if (vsOuiVersion == 1 && vsOuiType == 7 && vsOuiSubType == 8) {
+                                val deviceIdLen = bytes.short.toInt()
+                                bytes.position(bytes.position() + deviceIdLen)
+
+                                val siteIdLen = bytes.short.toInt()
+                                val siteId = ByteArray(siteIdLen)
+                                bytes.get(siteId)
+                                wiFiIEDetail.arubaInstantOnSiteID = siteId.decodeToString()
+
+                                bytes.position(bytes.position() + 1) // unknown
+
+                                val deviceNameLen = bytes.short.toInt()
+                                val deviceName = ByteArray(deviceNameLen)
+                                bytes.get(deviceName)
+                                wiFiIEDetail.arubaInstantOnDeviceName = deviceName.decodeToString()
                             }
                         } else if (oui.contentEquals(OUI_MERAKI)) {
                             val vsUnknown1 = bytes.get().toInt() // 0x07
