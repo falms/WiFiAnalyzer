@@ -12,6 +12,7 @@ data class WiFiIEDetail(
     var merakiNetworkID: String = String.EMPTY,
     var roamingConsortiumNumANQPOIs: Int = -1,
     var roamingConsortiumOIs: List<String> = listOf(),
+    var messages: List<String> = listOf(),
 ) {
     fun deviceDetail(): String {
         val details = mutableListOf<String>()
@@ -38,6 +39,9 @@ data class WiFiIEDetail(
             if (roamingConsortiumNumANQPOIs >= 0) { text += "(${roamingConsortiumNumANQPOIs})" }
             if (roamingConsortiumOIs.isNotEmpty()) { text += ": " + roamingConsortiumOIs.joinToString(separator = " ") }
             details.add(text)
+        }
+        if (messages.isNotEmpty()) {
+            details.add(messages.joinToString(separator = " "))
         }
         return details.distinct().joinToString(separator = " ")
     }
