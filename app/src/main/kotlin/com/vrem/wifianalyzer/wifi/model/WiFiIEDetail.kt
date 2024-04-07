@@ -7,6 +7,7 @@ data class WiFiIEDetail(
     var wpsManufacturer: String = String.EMPTY,
     var wpsDeviceName: String = String.EMPTY,
     var wpsModelName: String = String.EMPTY,
+    var merakiNetworkID: String = String.EMPTY,
     var roamingConsortiumNumANQPOIs: Int = -1,
     var roamingConsortiumOIs: List<String> = listOf(),
 ) {
@@ -20,6 +21,9 @@ data class WiFiIEDetail(
         }
         if (wpsModelName.isNotEmpty()) {
             details.add(wpsModelName)
+        }
+        if (merakiNetworkID.isNotEmpty()) {
+            details.add("Meraki: $merakiNetworkID")
         }
         if (roamingConsortiumNumANQPOIs >= 0 || roamingConsortiumOIs.isNotEmpty()) {
             var text = "RCOI"

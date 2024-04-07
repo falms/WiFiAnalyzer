@@ -8,6 +8,7 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
     @OptIn(ExperimentalStdlibApi::class)
     companion object {
         private val OUI_MICROSOFT = "0050F2".hexToByteArray()
+        private val OUI_MERAKI    = "00180A".hexToByteArray()
 
         fun parse(elements: List<WiFiInformationElement>): WiFiIEDetail {
             val wiFiIEDetail = WiFiIEDetail()
@@ -75,6 +76,14 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
                                         }
                                     }
                                 }
+                            }
+                        } else if (oui.contentEquals(OUI_MERAKI)) {
+                            val vsUnknown1 = bytes.get().toInt() // 0x07
+                            if (vsUnknown1 == 0x07) {
+                                bytes.position(bytes.position() + 5)
+                                val networkId = ByteArray(bytes.remaining())
+                                bytes.get(networkId)
+                                wiFiIEDetail.merakiNetworkID = networkId.toHexString(HexFormat.UpperCase).trimStart('0')
                             }
                         }
                     }
