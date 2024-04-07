@@ -9,6 +9,7 @@ data class WiFiIEDetail(
     var wpsModelName: String = String.EMPTY,
     var arubaInstantOnSiteID: String = String.EMPTY,
     var arubaInstantOnDeviceName: String = String.EMPTY,
+    var appleHotspotConnectedSSID: String = String.EMPTY,
     var merakiNetworkID: String = String.EMPTY,
     var roamingConsortiumNumANQPOIs: Int = -1,
     var roamingConsortiumOIs: List<String> = listOf(),
@@ -30,6 +31,9 @@ data class WiFiIEDetail(
         }
         if (arubaInstantOnSiteID.isNotEmpty()) {
             details.add("ION: $arubaInstantOnSiteID")
+        }
+        if (appleHotspotConnectedSSID.isNotEmpty()) {
+            details.add("SSID: $appleHotspotConnectedSSID")
         }
         if (merakiNetworkID.isNotEmpty()) {
             details.add("Meraki: $merakiNetworkID")

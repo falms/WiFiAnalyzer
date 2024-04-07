@@ -10,6 +10,7 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
     companion object {
         private val OUI_MICROSOFT = "0050F2".hexToByteArray()
         private val OUI_ARUBA     = "000B86".hexToByteArray()
+        private val OUI_APPLE     = "0017F2".hexToByteArray()
         private val OUI_MERAKI    = "00180A".hexToByteArray()
 
         fun parse(elements: List<WiFiInformationElement>): WiFiIEDetail {
@@ -111,6 +112,16 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
                             val deviceName = ByteArray(deviceNameLen)
                             bytes.get(deviceName)
                             wiFiIEDetail.arubaInstantOnDeviceName = deviceName.decodeToString()
+                        }
+                    } else if (oui.contentEquals(OUI_APPLE)) {
+                        val vsUnknown1 = bytes.get().toInt() // 0x06
+                        val vsUnknown2 = bytes.get().toInt() // 0x03
+                        val vsUnknown3 = bytes.get().toInt() // 0x01
+                        if (vsUnknown1 == 0x06 && vsUnknown2 == 0x03 && vsUnknown3 == 0x01) {
+                            val ssidLen = bytes.get().toInt()
+                            val ssid = ByteArray(ssidLen)
+                            bytes.get(ssid)
+                            wiFiIEDetail.appleHotspotConnectedSSID = ssid.decodeToString().trimStart { it <= '\u0000' }
                         }
                     } else if (oui.contentEquals(OUI_MERAKI)) {
                         val vsUnknown1 = bytes.get().toInt() // 0x07
