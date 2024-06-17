@@ -98,8 +98,7 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
 
                         // Instant On AP ?
                         if (vsOuiVersion == 1 && vsOuiType == 7 && vsOuiSubType == 8) {
-                            val deviceIdLen = bytes.short.toInt()
-                            bytes.position(bytes.position() + deviceIdLen)
+                            bytes.position(bytes.position() + 13) // macaddr, unknown
 
                             val siteIdLen = bytes.short.toInt()
                             val siteId = ByteArray(siteIdLen)
