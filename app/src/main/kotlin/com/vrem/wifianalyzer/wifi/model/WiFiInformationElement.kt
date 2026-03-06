@@ -98,16 +98,19 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
 
                         // Instant On AP ?
                         if (vsOuiVersion == 1 && vsOuiType == 7 && vsOuiSubType == 8) {
-                            bytes.position(bytes.position() + 13) // macaddr, unknown
+                            bytes.position(bytes.position() + 2) // unknown 0x001B(6GHz?)/0x000B(other?)
+                            bytes.position(bytes.position() + 6) // Portal AP's MAC(BSSID)
+                            bytes.position(bytes.position() + 1) // unknown 0x00?
+                            bytes.position(bytes.position() + 5) // unknown
 
-                            val siteIdLen = bytes.short.toInt()
+                            val siteIdLen = bytes.get().toInt()
                             val siteId = ByteArray(siteIdLen)
                             bytes.get(siteId)
                             wiFiIEDetail.arubaInstantOnSiteID = siteId.decodeToString()
 
-                            bytes.position(bytes.position() + 1) // unknown
+                            bytes.position(bytes.position() + 2) // unknown
 
-                            val deviceNameLen = bytes.short.toInt()
+                            val deviceNameLen = bytes.get().toInt()
                             val deviceName = ByteArray(deviceNameLen)
                             bytes.get(deviceName)
                             wiFiIEDetail.arubaInstantOnDeviceName = deviceName.decodeToString()
