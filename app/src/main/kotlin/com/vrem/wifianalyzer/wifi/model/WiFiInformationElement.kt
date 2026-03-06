@@ -97,7 +97,7 @@ data class WiFiInformationElement(val id: Int, val idExt: Int, val bytes: ByteBu
                         val vsOuiSubType = bytes.get().toInt()
 
                         // Instant On AP ?
-                        if (vsOuiVersion == 1 && vsOuiType == 7 && vsOuiSubType == 8) {
+                        if (vsOuiVersion == 1 && (vsOuiType == 2 || vsOuiType == 7) && vsOuiSubType == 8) {
                             bytes.position(bytes.position() + 2) // unknown 0x001B(6GHz?)/0x000B(other?)
                             bytes.position(bytes.position() + 6) // Portal AP's MAC(BSSID)
                             bytes.position(bytes.position() + 1) // unknown 0x00?
